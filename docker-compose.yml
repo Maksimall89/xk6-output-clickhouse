@@ -1,0 +1,57 @@
+---
+version: '3.9'
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.6.2
+    networks:
+      - clickhouse
+    ports:
+      - "8123:8123" # HTTP
+      - "9000:9000" # Native
+    volumes:
+      - ./clickhouse/users.xml:/etc/clickhouse-server/users.xml # https://clickhouse.com/docs/en/operations/settings/settings-users#user-namepassword
+      - clickhouse_data:/var/lib/clickhouse
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 262144
+        hard: 262144
+
+  grafana:
+    image: grafana/grafana:10.0.2
+    networks:
+      - clickhouse
+    ports:
+      - "3000:3000"
+    links:
+      - clickhouse
+    depends_on:
+      - clickhouse
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/
+
+  k6:
+    build: .
+    networks:
+      - clickhouse
+    ports:
+      - "6565:6565"
+    links:
+      - clickhouse
+    depends_on:
+      - clickhouse
+    environment:
+      - K6_OUT=clickhouse=clickhouse://default:pass@clickhouse:9000/k6DB
+    volumes:
+      - ./examples:/scripts
+
+networks:
+  clickhouse: null
+
+volumes:
+  clickhouse_data: {}
