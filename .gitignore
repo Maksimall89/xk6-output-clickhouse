@@ -4,6 +4,9 @@
 *.dll
 *.so
 *.dylib
+*.png
+*.jpg
+*.json
 
 # Test binary, built with `go test -c`
 *.test
@@ -13,3 +16,5 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+/.idea
+/.vscode
