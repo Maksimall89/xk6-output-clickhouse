@@ -107,10 +107,11 @@ contacts ✓ [======================================] 01/15 VUs  1m20s
 
 ## Configure
 
-| ENV                         | Default                                       | Description                                                                                                        |
-|-----------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `K6_CLICKHOUSE_PUSH_INTERVAL` | `15s` (15 second)                               | The flush's frequency of the `k6` metrics. |
+| ENV                         | Default                                         | Description                                                                                                        |
+|-----------------------------|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `K6_CLICKHOUSE_PUSH_INTERVAL` | `15s` (15 second)                               | The flush's frequency of the `k6` metrics.                                                                         |
 | `K6_CLICKHOUSE_DSN`           | `clickhouse://default:pass@localhost:9000/k6DB` | The [Clickhouse Connection string](https://clickhouse.com/docs/en/integrations/sql-clients/cli#connection_string). |
+| `K6_CLICKHOUSE_IGNORE_METRICS`           | `-`                                             | The [metrics](https://k6.io/docs/using-k6/metrics/) that do not need to be sent to the database.                                                      |
 
 For example:
 

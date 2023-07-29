@@ -7,21 +7,26 @@ import (
 	"github.com/mstoykov/envconfig"
 	"go.k6.io/k6/lib/types"
 	"gopkg.in/guregu/null.v4"
+	"strings"
 	"time"
 )
 
 // Config xk6-clickhouse-output.
 type Config struct {
-	PushInterval types.NullDuration `json:"pushInterval" envconfig:"K6_CLICKHOUSE_PUSH_INTERVAL"`
-	DSN          null.String        `json:"dsn" envconfig:"K6_CLICKHOUSE_DSN"`
-	ClickConfig  *clickhouse.Options
+	PushInterval  types.NullDuration `json:"pushInterval" envconfig:"K6_CLICKHOUSE_PUSH_INTERVAL"`
+	DSN           null.String        `json:"dsn" envconfig:"K6_CLICKHOUSE_DSN"`
+	IgnoreMetrics null.String        `json:"ignoreMetric" envconfig:"K6_CLICKHOUSE_IGNORE_METRICS"`
+	IgnMetrics    []string
+	ClickConfig   *clickhouse.Options
 }
 
 // newConfig by default parameters.
 func newConfig() Config {
 	return Config{
-		PushInterval: types.NewNullDuration(time.Second*30, false),
-		DSN:          null.NewString("clickhouse://default:pass@localhost:9000/k6DB", false),
+		PushInterval:  types.NewNullDuration(time.Second*30, false),
+		DSN:           null.NewString("clickhouse://default:pass@localhost:9000/k6DB", false),
+		IgnoreMetrics: null.NewString("", false),
+		IgnMetrics:    nil,
 	}
 }
 
@@ -58,6 +63,11 @@ func getConsolidatedConfig(jsonRawCfg json.RawMessage, env map[string]string, co
 }
 
 func (c Config) apply(cfg Config) Config {
+
+	if cfg.IgnoreMetrics.Valid {
+		c.IgnMetrics = strings.Split(cfg.IgnoreMetrics.String, ",")
+	}
+
 	if cfg.PushInterval.Valid {
 		c.PushInterval = cfg.PushInterval
 	}
