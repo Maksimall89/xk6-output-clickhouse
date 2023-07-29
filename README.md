@@ -30,16 +30,16 @@ Then:
 
 1. [Install](https://github.com/grafana/xk6) `xk6`:
 
-  ```shell
-  go install go.k6.io/xk6/cmd/xk6@latest
-  ```
+```shell
+go install go.k6.io/xk6/cmd/xk6@latest
+```
 
 2. Build the binary:
 
-  ```shell
-  CGO_ENABLED=1
-  xk6 build --with github.com/Maksimall89/xk6-output-clickhouse@latest
-  ```
+```shell
+CGO_ENABLED=1
+xk6 build --with github.com/Maksimall89/xk6-output-clickhouse@latest
+```
 
 If you use Windows:
 
@@ -107,10 +107,11 @@ contacts ✓ [======================================] 01/15 VUs  1m20s
 
 ## Configure
 
-| ENV                         | Default                                       | Description                                                                                                        |
-|-----------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| `K6_CLICKHOUSE_PUSH_INTERVAL` | `15s` (15 second)                               | The flush's frequency of the `k6` metrics. |
+| ENV                         | Default                                         | Description                                                                                                        |
+|-----------------------------|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `K6_CLICKHOUSE_PUSH_INTERVAL` | `15s` (15 second)                               | The flush's frequency of the `k6` metrics.                                                                         |
 | `K6_CLICKHOUSE_DSN`           | `clickhouse://default:pass@localhost:9000/k6DB` | The [Clickhouse Connection string](https://clickhouse.com/docs/en/integrations/sql-clients/cli#connection_string). |
+| `K6_CLICKHOUSE_IGNORE_METRICS`           | `-`                                             | The [metrics](https://k6.io/docs/using-k6/metrics/) that do not need to be sent to the database.                                                      |
 
 For example:
 
@@ -135,7 +136,7 @@ Clone the repo to get started and follow these steps:
 3. Start the docker compose environment.
 
 ```shell
-   docker-compose up -d
+docker-compose up -d
 ```
 
 ```shell
@@ -148,17 +149,11 @@ Clone the repo to get started and follow these steps:
 
 3. Use the k6 Docker image to run the k6 script and send metrics to the Clickhouse container started in the previous step.
 
-    ```shell
-    docker-compose run --rm -T k6 run -<samples/script.js
-    ```
+```shell
+docker-compose run --rm -T k6 run -<samples/script.js
+```
 
-   For convenience, the `docker-run.sh` can be used to simply:
-
-    ```shell
-    ./docker-run.sh samples/sample.js
-    ```
-
-   > Note that the [docker-compose command to run k6 tests](https://k6.io/docs/getting-started/running-k6/) might differ depending your OS.
+> Note that the [docker-compose command to run k6 tests](https://k6.io/docs/getting-started/running-k6/) might differ depending your OS.
 
 5. Visit http://localhost:3000/ to view results in Grafana.
 

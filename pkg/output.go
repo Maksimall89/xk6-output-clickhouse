@@ -23,8 +23,9 @@ type Output struct {
 
 	periodicFlusher *output.PeriodicFlusher
 
-	resTags []string
-	row     []string
+	resTags       []string
+	row           []string
+	ignoreMetrics []string
 
 	clickConnect clickhouse.Conn
 	ctx          context.Context
@@ -69,12 +70,13 @@ func newOutput(params output.Params) (*Output, error) {
 	sort.Strings(resTags)
 
 	return &Output{
-		logger:       logger.Sugar(),
-		config:       config,
-		clickConnect: clickConn,
-		resTags:      resTags,
-		row:          make([]string, 3+len(resTags)+2),
-		ctx:          context.Background(),
+		logger:        logger.Sugar(),
+		config:        config,
+		clickConnect:  clickConn,
+		resTags:       resTags,
+		row:           make([]string, 3+len(resTags)+2),
+		ctx:           context.Background(),
+		ignoreMetrics: config.IgnMetrics,
 	}, nil
 }
 
@@ -140,6 +142,9 @@ func (o *Output) flushMetrics() {
 	var row []string
 	for _, sc := range samples {
 		for _, sample := range sc.GetSamples() {
+			if isIgnoreMetrics(sample.Metric.Name, o.ignoreMetrics) {
+				continue
+			}
 			timestamp, row = sampleToRow(&sample, o.resTags, o.row)
 			for k, v := range row {
 				switch k {
@@ -261,4 +266,14 @@ func (o *Output) createSchemaDB() string {
 		) ENGINE = MergeTree()
 			ORDER BY (timestamp, metric_name)
 			PRIMARY KEY (timestamp, metric_name);`, o.config.ClickConfig.Auth.Database, metricsName)
+}
+
+// check isIgnoreMetrics list or not.
+func isIgnoreMetrics(metricsName string, ignoreMetrics []string) bool {
+	for _, ignMetric := range ignoreMetrics {
+		if metricsName == ignMetric {
+			return true
+		}
+	}
+	return false
 }
