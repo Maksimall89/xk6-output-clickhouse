@@ -127,7 +127,7 @@ K6_OUT=clickhouse=clickhouse://default:pass@localhost:9000/k6DB k6 run script.js
 
 ## Docker Compose
 
-This repo includes a [docker-compose.yml](./docker-compose.yml) file that starts Clickhouse, Grafana, and a custom build of k6 having the `xk6-output-timescaledb` extension.  This is just a quick setup to show the usage for the real use case you might want to deploy outside of docker, use volumes, and probably update versions.
+This repo includes a [docker-compose.yml](./docker-compose.yml) file that starts Clickhouse, Grafana, and a custom build of k6 having the `xk6-output-clickhouse` extension.  This is just a quick setup to show the usage for the real use case you might want to deploy outside of docker, use volumes, and probably update versions.
 
 Clone the repo to get started and follow these steps:
 
