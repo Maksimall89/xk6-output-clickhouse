@@ -17,5 +17,8 @@ tests :
 clean:
 	rm -f ./k6
 
+build-docker:
+	docker build . --file Dockerfile --tag k6-clickhouse:$(date +%s)
+
 .PHONY: build clean format lint tests
 

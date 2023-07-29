@@ -8,6 +8,3 @@ import (
 func init() {
 	output.RegisterExtension(pkg.NameOutput, pkg.New)
 }
-
-// TODO write readme.md
-// TODO make gitlab-ci linter docker, go
