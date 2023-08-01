@@ -160,6 +160,7 @@ docker-compose run --rm -T k6 run -<samples/script.js
 ### Grafana dashboards
 
 The docker-compose setup comes with one pre-built [dashboard](./grafana/dashboards/Clickhouse%20Load%20Testing%20Results.json) for visualizing the results of a test run.
+Also, you could download the dashboard from https://grafana.com/grafana/dashboards/19270-clickhouse-load-testing-results/  
 
 ![Dashboard of test runs](./images/dashboard-1.png)
 ![Dashboard of test result](./images/dashboard-2.png)
