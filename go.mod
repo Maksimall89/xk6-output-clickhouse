@@ -1,12 +1,12 @@
 module github.com/Maksimall89/xk6-output-clickhouse
 
-go 1.18
+go 1.19
 
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.10.1
 	github.com/mstoykov/envconfig v1.4.1-0.20220114105314-765c6d8c76f1
 	github.com/stretchr/testify v1.8.4
-	go.k6.io/k6 v0.45.0
+	go.k6.io/k6 v0.45.1
 	go.uber.org/zap v1.24.0
 	gopkg.in/guregu/null.v4 v4.0.0
 )
